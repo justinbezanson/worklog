@@ -14,8 +14,17 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
+Route::get('/dashboard/{date?}', function ($date = null) {
+    $today = new DateTime($date ?? 'now');
+    $yesterday = (new DateTime($today->format('Y-m-d')))->sub(new DateInterval('P1D'));
+    $tomorrow = (new DateTime($today->format('Y-m-d')))->add(new DateInterval('P1D'));
+
+    return Inertia::render('Dashboard', [
+        'today' => $today->format('Y-m-d'),
+        'yesterday' => $yesterday->format('Y-m-d'),
+        'tomorrow' => $tomorrow->format('Y-m-d'),
+    ]);
+
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
