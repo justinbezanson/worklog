@@ -3,7 +3,7 @@
         <div class="justify-self-end">
             <Link :href="route('dashboard', { date: yesterday})">
                 <ChevronLeftIcon class="size-5" />
-            </Link>
+            </Link> 
         </div>
         <div class="">
             {{ today }}
