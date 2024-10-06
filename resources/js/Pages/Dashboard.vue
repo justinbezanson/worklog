@@ -31,6 +31,7 @@ defineProps({
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900">                        
                         <DatePager :today="today" :yesterday="yesterday" :tomorrow="tomorrow" />
+                        <Button type="button" label="New Entry" icon="pi pi-plus" class="p-button-success" />
                     </div>
                 </div>
             </div>
