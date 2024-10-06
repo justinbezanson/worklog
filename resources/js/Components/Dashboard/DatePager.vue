@@ -1,15 +1,24 @@
 <template>
-    <div class="grid grid-cols-3 text-center w-1/2 mx-auto">
+    <div class="text-center">
+        <Link 
+            :href="route('dashboard')" 
+            title="Today"
+            class="text-sm text-blue-600 hover:text-blue-700 underline hover:no-underline"
+        >
+            Today
+        </Link> 
+    </div>
+    <div class="grid grid-cols-3 text-center w-full md:w-1/2 mx-auto">
         <div class="justify-self-end">
-            <Link :href="route('dashboard', { date: yesterday})">
+            <Link :href="route('dashboard', { date: yesterday})" :title="yesterdayFormatted">
                 <ChevronLeftIcon class="size-5" />
             </Link> 
         </div>
-        <div class="">
-            {{ today }}
+        <div>
+            {{ todayFormatted }}
         </div>
-        <div class="">
-            <Link :href="route('dashboard', { date: tomorrow})">
+        <div class="justify-self-start">
+            <Link :href="route('dashboard', { date: tomorrow})" :title="tomorrowFormatted">
                 <ChevronRightIcon class="size-5" />
             </Link>
         </div>
@@ -25,12 +34,20 @@ defineProps({
     today: {
         type: String,
     },
+    todayFormatted: {
+        type: String,
+    },
     yesterday: {
         type: String,
     },
-    tomorrow: {
+    yesterdayFormatted: {
         type: String,
-        required: true,
+    },
+    tomorrow: {
+        type: String
+    },
+    tomorrowFormatted: {
+        type: String
     },
 });
 

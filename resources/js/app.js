@@ -7,6 +7,7 @@ import Aura from '@primevue/themes/aura';
 import { createInertiaApp } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy';
+import 'primeicons/primeicons.css'
 
 import Button from "primevue/button"
 
