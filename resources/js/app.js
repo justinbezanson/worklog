@@ -10,6 +10,10 @@ import { ZiggyVue } from '../../vendor/tightenco/ziggy';
 import 'primeicons/primeicons.css'
 
 import Button from "primevue/button"
+import Badge from "primevue/badge"
+import SplitButton from 'primevue/splitbutton';
+import Toast from 'primevue/toast';
+import ToastService from 'primevue/toastservice';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -25,7 +29,11 @@ createInertiaApp({
                     preset: Aura
                 }
             })
+            .use(ToastService)
             .component('Button', Button)
+            .component('Badge', Badge)
+            .component('SplitButton', SplitButton)
+            .component('Toast', Toast)
             .mount(el);
     },
     progress: {
