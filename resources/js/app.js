@@ -3,7 +3,7 @@ import '../css/app.css';
 
 import { createApp, h } from 'vue';
 import PrimeVue from 'primevue/config';
-import Aura from '@primevue/themes/aura';
+import Aura from '@primevue/themes/lara';
 import { createInertiaApp } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy';
@@ -14,6 +14,10 @@ import Badge from "primevue/badge"
 import SplitButton from 'primevue/splitbutton';
 import Toast from 'primevue/toast';
 import ToastService from 'primevue/toastservice';
+import Dialog from 'primevue/dialog';
+import InputText from 'primevue/inputtext';
+import DatePicker from 'primevue/datepicker';
+import Select from 'primevue/select';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -34,6 +38,10 @@ createInertiaApp({
             .component('Badge', Badge)
             .component('SplitButton', SplitButton)
             .component('Toast', Toast)
+            .component('Dialog', Dialog)
+            .component('InputText', InputText)  
+            .component('DatePicker', DatePicker)
+            .component('Select', Select)
             .mount(el);
     },
     progress: {

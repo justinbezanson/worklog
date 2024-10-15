@@ -1,3 +1,23 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.min-1-bg {
+    background:#f5f5f5
+}
+
+.min-2-bg {
+    background:#b9c3d1;
+}
+
+.min-3-bg {
+    background:#a8b0be;
+}
+
+.min-4-bg {
+    background:#829ab5;
+}
+
+.min-5-bg {
+    background:#8d9194;
+}
