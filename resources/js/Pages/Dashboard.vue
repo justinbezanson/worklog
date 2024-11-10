@@ -1,11 +1,12 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head } from '@inertiajs/vue3';
+import { Head, router } from '@inertiajs/vue3';
 import DatePager from '@/Components/Dashboard/DatePager.vue';
 import { useToast } from "primevue/usetoast";
-import { ref } from "vue";
+import { onMounted, ref, watch } from "vue";
+import CreateForm from './Tasks/CreateForm.vue';
 
-defineProps({
+const props = defineProps({
     today: {
         type: String,
     },
@@ -24,20 +25,17 @@ defineProps({
     tomorrowFormatted: {
         type: String,
     },
+    message: {
+        type: String
+    },
+    'tasks': {
+        type: Array,    
+        required: true
+    }
 });
 
-const visible = ref(false);
-const date = ref();
-const status = ref();
-const description = ref();
-
 const toast = useToast();
-
-const statuses = ref([
-    { name: 'Queued', code: 'queued' },
-    { name: 'In Progess', code: 'inprogess' },
-    { name: 'Done', code: 'done' }
-]);
+const visible = ref(false);
 
 const actionItems = [
     {
@@ -63,9 +61,16 @@ const actionItems = [
     }
 ];
 
-const save = () => {
-    toast.add({ severity: 'success', summary: 'Success', detail: 'Data Saved', life: 3000 });
+const save = (form) => {
+    router.post('/task/create', form);
+    visible.value = false;
 };
+
+watch(() => props.message, (newValue) => {
+    if(newValue) {
+        toast.add({ severity: 'success', summary: 'Success', detail: newValue, life: 3000 });
+    }
+});
 
 </script>
 
@@ -103,12 +108,12 @@ const save = () => {
 
                     <table class="w-full md:w-1/2 mx-auto work-log-table">
                         <tbody>
-                            <tr>
+                            <tr v-for="task in tasks" :key="task.id">
                                 <td>
-                                    <Badge value="Queued" severity="info" />
+                                    <Badge :value="task.status" severity="info" />
                                 </td>
                                 <td>
-                                    DDX-7936 - Case onhold missing required files
+                                    {{ task.description }}
                                 </td>
                                 <td class="actions">
                                     <SplitButton 
@@ -119,72 +124,17 @@ const save = () => {
                                     ></SplitButton>
                                 </td>
                             </tr>
-                            <tr>
-                                <td>
-                                    <Badge value="In Progress" severity="warn" />
-                                </td>
-                                <td>
-                                    DDX-7936 - Case onhold missing required files
-                                </td>
-                                <td class="actions">
-                                    
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <Badge value="Done" severity="success" />
-                                </td>
-                                <td>
-                                    DDX-7936 - Case onhold missing required files
-                                </td>
-                                <td class="actions">
-                                    
-                                </td>
-                            </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
 
-        <Dialog v-model:visible="visible" modal header="New Task" :style="{ width: '35rem' }">
-
-            <span class="text-surface-500 dark:text-surface-400 block mb-8">Enter task information.</span>
-            
-            <div class="flex items-center gap-4 mb-4">
-                <label for="username" class="font-semibold w-24">Date</label>
-                <DatePicker v-model="date" class="flex-auto" placeholder="Select a date" />
-            </div>
-
-            <div class="flex items-center gap-4 mb-4">
-                <label for="email" class="font-semibold w-24">Status</label>
-            
-                <Select 
-                    v-model="status" 
-                    :options="statuses"
-                    optionLabel="name" 
-                    placeholder="Select a Status" 
-                    class="flex-auto" 
-                />
-            </div>
-
-            <div class="flex flex-wrap items-center gap-4 mb-1">
-                <label for="email" class="font-semibold w-24">Description</label>
-                <InputText  
-                    class="flex-auto" 
-                    autocomplete="off"
-                    placeholder="Task description"
-                    maxlength="255"
-                />
-            </div>
-            
-            <div class="text-right mb-8">255 characters remaining</div>
-
-            <div class="flex justify-end gap-2">
-                <Button type="button" label="Cancel" severity="secondary" @click="visible = false"></Button>
-                <Button type="button" label="Save" @click="visible = false"></Button>
-            </div>
-        </Dialog>
+        <CreateForm 
+            :visible="visible"
+             @create-form:close="visible = false" 
+             @create-form:save="save"
+        />
     </AuthenticatedLayout>
 </template>
 

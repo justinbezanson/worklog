@@ -1,9 +1,14 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\Route;
+use App\Models\Task;
 use Inertia\Inertia;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Foundation\Application;
+use App\Http\Requests\TaskStoreRequest;
+use App\Http\Controllers\TaskController;
+use Illuminate\Container\Attributes\Auth;
+use App\Http\Controllers\ProfileController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -14,10 +19,15 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard/{date?}', function ($date = null) {
+Route::get('/dashboard/{date?}', function (Request $request, $date = null) {
     $today = new DateTime($date ?? 'now');
     $yesterday = (new DateTime($today->format('Y-m-d')))->sub(new DateInterval('P1D'));
     $tomorrow = (new DateTime($today->format('Y-m-d')))->add(new DateInterval('P1D'));
+    $message = null;
+    
+    if($request->session()->has('message')) {
+        $message = $request->session()->get('message');
+    }
 
     return Inertia::render('Dashboard', [
         'today' => $today->format('Y-m-d'),
@@ -26,9 +36,13 @@ Route::get('/dashboard/{date?}', function ($date = null) {
         'yesterdayFormatted' => $yesterday->format('l, F jS'),
         'tomorrow' => $tomorrow->format('Y-m-d'),
         'tomorrowFormatted' => $tomorrow->format('l, F jS'),
+        'message' => $message,
+        'tasks' => Task::where('task_date', '=', $today->format('Y-m-d').'T04:00:00.000Z')->get(),
     ]);
 
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::post('/task/create', [TaskController::class, 'store'])->middleware(['auth', 'verified'])->name('task.create');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
