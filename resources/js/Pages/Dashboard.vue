@@ -64,6 +64,37 @@ const actionItems = [
 const save = (form) => {
     router.post('/task/create', form);
     visible.value = false;
+    form.status = null;
+    form.description = null;
+};
+
+const getStatusLabel = (status) => {
+    switch(status) {
+        case 'inprogress':
+            return 'In Progress';
+        case 'done':
+            return 'Done';
+        case 'queued':
+            return 'Queued';
+        default:
+            return 'Unknown';
+    }
+};
+
+const getStatusSeverity = (status) => {
+    switch(status) {
+        case 'inprogress':
+            return 'danger';
+        case 'done':
+            return 'success';
+        case 'queued':
+        default:
+            return 'info';
+    }
+};
+
+const getDatePickerDate = () => {
+    return new Date(props.today + 'T00:00:00');
 };
 
 watch(() => props.message, (newValue) => {
@@ -110,7 +141,7 @@ watch(() => props.message, (newValue) => {
                         <tbody>
                             <tr v-for="task in tasks" :key="task.id">
                                 <td>
-                                    <Badge :value="task.status" severity="info" />
+                                    <Badge :value="getStatusLabel(task.status)" :severity="getStatusSeverity(task.status)" />
                                 </td>
                                 <td>
                                     {{ task.description }}
@@ -134,6 +165,7 @@ watch(() => props.message, (newValue) => {
             :visible="visible"
              @create-form:close="visible = false" 
              @create-form:save="save"
+             :date="getDatePickerDate()"
         />
     </AuthenticatedLayout>
 </template>

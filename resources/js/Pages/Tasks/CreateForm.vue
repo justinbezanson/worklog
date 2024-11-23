@@ -5,7 +5,12 @@
             
             <div class="flex items-center gap-4 mb-4">
                 <label for="username" class="font-semibold w-24">Date</label>
-                <DatePicker v-model="form.task_date" class="flex-auto" placeholder="Select a date" />
+                <DatePicker 
+                    v-model="form.task_date" 
+                    class="flex-auto" 
+                    placeholder="Select a date"
+                    dateFormat="yy-mm-dd"
+                />
             </div>
 
             <div class="flex items-center gap-4 mb-4">
@@ -48,6 +53,9 @@ import { ref, reactive, onMounted, watch } from "vue";
 const props = defineProps({
     visible: {
         type: Boolean,
+    },
+    date: {
+        type: Date,
     }
 });
 
@@ -62,14 +70,14 @@ watch(() => props.visible, (newValue) => {
 });
 
 const form = reactive({
-    task_date: null,
+    task_date: props.date,
     status: null,
     description: null,
 });
 
 const statuses = ref([
     { name: 'Queued', code: 'queued' },
-    { name: 'In Progess', code: 'inprogess' },
+    { name: 'In Progess', code: 'inprogress' },
     { name: 'Done', code: 'done' }
 ]);
 
